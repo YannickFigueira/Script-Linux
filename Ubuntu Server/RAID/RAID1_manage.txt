@@ -1,0 +1,38 @@
+Para substituir um disco com problemas em um RAID 1 usando mdadm, siga estes passos:
+
+1. Verifique o status do RAID
+Antes de substituir o disco, veja o estado da matriz RAID:
+
+bash
+cat /proc/mdstat
+Isso mostrará quais discos estão ativos e se há falhas.
+
+2. Marque o disco com falha
+Se o disco problemático for, por exemplo, /dev/sdb1, marque-o como falho:
+
+bash
+sudo mdadm --manage /dev/md0 --fail /dev/sdb1
+3. Remova o disco da matriz
+bash
+sudo mdadm --manage /dev/md0 --remove /dev/sdb1
+4. Substitua o disco físico
+Desligue o sistema e troque o disco defeituoso por um novo.
+
+Certifique-se de que o novo disco tem o mesmo tamanho ou maior.
+
+5. Copie a tabela de partições
+Se o disco antigo tinha partições, copie para o novo:
+
+bash
+sudo sfdisk -d /dev/sda | sudo sfdisk /dev/sdb
+6. Adicione o novo disco ao RAID
+bash
+sudo mdadm --manage /dev/md0 --add /dev/sdb1
+Isso iniciará a sincronização do RAID.
+
+7. Verifique o progresso
+Acompanhe a reconstrução com:
+
+bash
+cat /proc/mdstat
+Para mais detalhes, confira este guia sobre substituição de discos em RAID 1 e este tutorial sobre como lidar com falhas em RAID. 😊

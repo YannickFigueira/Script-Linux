@@ -1,0 +1,82 @@
+###Configurar IP fixo###
+Para configurar um IP fixo no Ubuntu Server, siga estes passos:
+
+1️⃣ Identificar o nome da interface de rede
+Primeiro, liste as interfaces de rede disponíveis:
+
+bash
+ip a
+Anote o nome da interface, como eth0 ou ens33.
+
+2️⃣ Editar o arquivo de configuração de rede
+No Ubuntu 18.04+, a configuração da rede é feita via Netplan. Edite o arquivo de configuração:
+
+bash
+sudo nano /etc/netplan/00-installer-config.yaml
+Adicione ou modifique a configuração para definir um IP fixo:
+
+yaml
+network:
+  ethernets:
+    enp0s7:
+      dhcp4: no
+      addresses:
+        - 192.168.2.145/24
+      routes:
+        - to: default
+          via: 192.168.2.1
+      nameservers:
+        addresses:
+          - 8.8.8.8
+          - 1.1.1.1
+  version: 2
+
+Substitua ens33 pelo nome correto da interface, e ajuste o IP, gateway e DNS conforme sua rede.
+
+3️⃣ Aplicar as mudanças
+Salve o arquivo (CTRL + X, Y, ENTER) e execute:
+
+bash
+sudo netplan apply
+Isso aplicará as novas configurações de rede.
+
+4️⃣ Verificar configuração
+Confirme se o IP foi alterado com:
+
+bash
+ip a
+
+###Instalar neofetch###
+sudo apt install neofetch
+
+###Instalar btop###
+sudo apt install btop
+
+###Instalar casaos###
+curl -fsSL https://get.casaos.io | sudo bash
+
+###Configurar unidade de disco###
+# lista as unidades
+lsblk
+
+# montar unidades
+# criar montagem
+sudo mkdir /mnt/storage1 && sudo mkdir /mnt/storage2
+
+# montar unidades
+sudo mount /dev/sdb1 /mnt/storage1 && sudo mount /dev/sdc1 /mnt/storage2
+
+# mover pasta para configurar
+sudo mv /DATA/AppData /mnt/storage1/AppData
+# criar link simbolico
+sudo ln -s /mnt/storage1/AppData/ /DATA/AppData
+
+## Configurar inicialização dos discos
+lsblk
+blkid
+
+sudo nano /etc/fstab
+
+UUID=4ff9e7b9-a8d9-4c7e-a259-e6e6f0ea9adb /mnt/storage1 ext4 defaults 0 2
+UUID=ed3eef9b-7edf-4c2f-8724-75d793454f52 /mnt/storage2 ext4 defaults 0 3
+
