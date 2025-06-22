@@ -1,44 +1,61 @@
-sudo apt update
+#! /bin/bash
 
-sudo apt upgrade -y
+# Pastas
+KEYRIGS="/etc/apt/keyrings"
+PASTA_INSTALACAO="/home/$USER/Downloads"
 
-sudo apt install qemu-system-x86 pass uidmap -y
+# URLs
+URL_DOCKER="https://desktop.docker.com/linux/main/amd64/docker-desktop-amd64.deb?utm_source=docker&utm_medium=webreferral&utm_campaign=docs-driven-download-linux-amd64&_gl=1*1cqxlth*_gcl_au*Nzc2Mjk4NDg2LjE3NTA0NjY2MjY.*_ga*MTI5Njc3NTgyOS4xNzUwNDY2NjI2*_ga_XJWPQMJYHQ*czE3NTA0NjY2MjYkbzEkZzEkdDE3NTA0NjgyOTIkajU0JGwwJGgw"
 
-sudo apt install -y ca-certificates curl gnupg lsb-release
+atualiazar_repositorios () {
+	sudo apt update
+}
 
-sudo mkdir -p /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+instalar_pacotes_apt () {
+	for pkga in qemu-system-x86 pass ca-certificates curl gnupg lsb-release uidmap; do sudo apt install -y $pkga || true; done
+}
 
-echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
-  https://download.docker.com/linux/ubuntu \
-  $(lsb_release -cs) stable" | \
-  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+preparar_ambiente () {
+	[[ ! -d $KEYRIGS ]] && sudo mkdir -p $KEYRIGS
+	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o $KEYRIGS/docker.gpg --yes
 
-sudo apt install docker-ce docker-ce-cli containerd.io -y
+	echo \
+	  "deb [arch=$(dpkg --print-architecture) signed-by=$KEYRIGS/docker.gpg] \
+	  https://download.docker.com/linux/ubuntu \
+	  $(lsb_release -cs) stable" | \
+	  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+	  atualiazar_repositorios
+  	  for pkgdkr in docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin; do sudo apt install -y $pkgdkr || true; done
+}
 
-wget -c -O docker-desktop-amd64.deb "https://desktop.docker.com/linux/main/amd64/docker-desktop-amd64.deb?utm_source=docker&utm_medium=webreferral&utm_campaign=docs-driven-download-linux-amd64&_gl=1*1cqxlth*_gcl_au*Nzc2Mjk4NDg2LjE3NTA0NjY2MjY.*_ga*MTI5Njc3NTgyOS4xNzUwNDY2NjI2*_ga_XJWPQMJYHQ*czE3NTA0NjY2MjYkbzEkZzEkdDE3NTA0NjgyOTIkajU0JGwwJGgw"
+instalar_pacotes_debs () {
+	wget -c "$URL_DOCKER" -O $PASTA_INSTALACAO/docker-desktop-amd64.deb 
+	sudo dpkg -i $PASTA_INSTALACAO/docker-desktop-amd64.deb
+	rm $PASTA_INSTALACAO/docker-desktop-amd64.deb
+	sudo apt -f install -y
+}
 
-sudo dpkg -i docker-desktop-amd64.deb
+upgrade_limpeza () {
+	sudo apt full-upgrade -y
+	sudo apt autoclean
+	sudo apt autoremove -y
+}
 
-rm docker-desktop-amd64.deb
+teste_ambiente () {
+	sudo docker run hello-world
+	docker --version
+	docker
+}
 
-sudo apt update 
+desenvolvedores () {
+	echo "P.S. E AGRADECIMENTO"
+	echo "Feito Por HBLlogan e YannickFigueira"
+}
 
-sudo apt upgrade -y
-
-sudo apt autoclean
-
-sudo apt autoremove -y
-
-sudo docker run hello-world
-
-docker --version
-
-docker
-
-echo "P.S. E AGRADECIMENTO"
-
-echo "Colocar este arquivo Docker.sh na pasta Downloads"
-
-echo "Feito Por HBLlogan e YannickFigueira"
+atualiazar_repositorios
+instalar_pacotes_apt
+preparar_ambiente
+instalar_pacotes_debs
+upgrade_limpeza
+teste_ambiente
+desenvolvedores
