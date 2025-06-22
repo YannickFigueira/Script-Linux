@@ -17,9 +17,11 @@ echo \
 
 sudo apt install docker-ce docker-ce-cli containerd.io -y
 
-wget -c /home/junior/Downloads/docker-desktop-amd64.deb "https://desktop.docker.com/linux/main/amd64/docker-desktop-amd64.deb?utm_source=docker&utm_medium=webreferral&utm_campaign=docs-driven-download-linux-amd64&_gl=1*1cqxlth*_gcl_au*Nzc2Mjk4NDg2LjE3NTA0NjY2MjY.*_ga*MTI5Njc3NTgyOS4xNzUwNDY2NjI2*_ga_XJWPQMJYHQ*czE3NTA0NjY2MjYkbzEkZzEkdDE3NTA0NjgyOTIkajU0JGwwJGgw"
+wget -c -O docker-desktop-amd64.deb "https://desktop.docker.com/linux/main/amd64/docker-desktop-amd64.deb?utm_source=docker&utm_medium=webreferral&utm_campaign=docs-driven-download-linux-amd64&_gl=1*1cqxlth*_gcl_au*Nzc2Mjk4NDg2LjE3NTA0NjY2MjY.*_ga*MTI5Njc3NTgyOS4xNzUwNDY2NjI2*_ga_XJWPQMJYHQ*czE3NTA0NjY2MjYkbzEkZzEkdDE3NTA0NjgyOTIkajU0JGwwJGgw"
 
-sudo dpkg -i /home/junior/Downloads/docker-desktop-amd64.deb
+sudo dpkg -i docker-desktop-amd64.deb
+
+rm docker-desktop-amd64.deb
 
 sudo apt update 
 
@@ -34,3 +36,9 @@ sudo docker run hello-world
 docker --version
 
 docker
+
+echo "P.S. E AGRADECIMENTO"
+
+echo "Colocar este arquivo Docker.sh na pasta Downloads"
+
+echo "Feito Por HBLlogan e YannickFigueira"
