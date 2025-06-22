@@ -1,0 +1,87 @@
+Criando uma matriz RAID 1
+O tipo de matriz RAID 1 é implementado pelo espelhamento de dados em todos os discos disponíveis. Cada disco em uma matriz RAID 1 obtém uma cópia completa dos dados, fornecendo redundância em caso de falha do dispositivo.
+
+Requisitos: Mínimo de 2 dispositivos de armazenamento.
+Benefício principal: redundância entre dois dispositivos de armazenamento.
+Itens a ter em mente: como duas cópias dos dados são mantidas, apenas metade do espaço em disco será utilizável.
+Identificando os dispositivos componentes
+Para começar, encontre os identificadores dos discos brutos que você usará:
+
+lsblk -o NAME,SIZE,FSTYPE,TYPE,MOUNTPOINT
+
+OutputNAME     SIZE FSTYPE   TYPE MOUNTPOINT
+sda      100G          disk 
+sdb      100G          disk 
+vda       25G          disk 
+├─vda1  24.9G ext4     part /
+├─vda14    4M          part 
+└─vda15  106M vfat     part /boot/efi
+vdb      466K iso9660  disk 
+Neste exemplo, você tem dois discos sem um sistema de arquivos, cada um com 100 G de tamanho. Esses dispositivos receberam os identificadores /dev/sda e /dev/sdb para esta sessão e serão os componentes brutos que você usará para construir a matriz.
+
+Criando a matriz
+Para criar uma matriz RAID 1 com esses componentes, passe-os para o comando mdadm --create. Você terá que especificar o nome do dispositivo que deseja criar, o nível de RAID e o número de dispositivos. Neste exemplo de comando, você nomeará o dispositivo /dev/md0 e incluirá os discos que construirão o array:
+
+sudo mdadm --create --verbose /dev/md0 --level=1 --raid-devices=2 /dev/sda /dev/sdb
+
+Se os dispositivos componentes que você está usando não forem partições com o sinalizador boot ativado, você provavelmente receberá o seguinte aviso. É seguro responder com y e continuar:
+
+Outputmdadm: Note: this array has metadata at the start and
+    may not be suitable as a boot device.  If you plan to
+    store '/boot' on this device please ensure that
+    your boot-loader understands md/v1.x metadata, or use
+    --metadata=0.90
+mdadm: size set to 104792064K
+Continue creating array? y
+A ferramenta mdadm começará a espelhar as unidades. Isso pode levar algum tempo para ser concluído, mas a matriz pode ser usada durante esse tempo. Você pode monitorar o progresso do espelhamento verificando o arquivo /proc/mdstat:
+
+cat /proc/mdstat
+
+OutputPersonalities : [linear] [multipath] [raid0] [raid1] [raid6] [raid5] [raid4] [raid10] 
+md0 : active raid1 sdb[1] sda[0]
+      104792064 blocks super 1.2 [2/2] [UU]
+      [====>................]  resync = 20.2% (21233216/104792064) finish=6.9min speed=199507K/sec
+      
+unused devices: <none>
+Na primeira linha destacada, o dispositivo /dev/md0 foi criado na configuração RAID 1 usando /dev/sda e /dev/sdb dispositivos. A segunda linha destacada revela o progresso do espelhamento. Você pode continuar na próxima etapa enquanto esse processo é concluído.
+
+Criando e montando o sistema de arquivos
+Em seguida, crie um sistema de arquivos no array:
+
+sudo mkfs.ext4 -F /dev/md0
+
+Em seguida, crie um ponto de montagem para anexar o novo sistema de arquivos:
+
+sudo mkdir -p /mnt/md0
+
+Você pode montar o sistema de arquivos executando o seguinte:
+
+sudo mount /dev/md0 /mnt/md0
+
+Verifique se o novo espaço está disponível:
+
+df -h -x devtmpfs -x tmpfs
+
+OutputFilesystem      Size  Used Avail Use% Mounted on
+/dev/vda1        25G  1.4G   23G   6% /
+/dev/vda15      105M  3.4M  102M   4% /boot/efi
+/dev/md0         99G   60M   94G   1% /mnt/md0
+O novo sistema de arquivos está montado e acessível.
+
+Salvando o layout da matriz
+Para garantir que o array seja remontado automaticamente na inicialização, você deve ajustar o arquivo /etc/mdadm/mdadm.conf. Você pode verificar automaticamente a matriz ativa e anexar o arquivo com o seguinte:
+
+sudo mdadm --detail --scan | sudo tee -a /etc/mdadm/mdadm.conf
+
+Posteriormente, você pode atualizar o initramfs, ou sistema de arquivos RAM inicial, para que a matriz esteja disponível durante o processo de inicialização inicial:
+
+sudo update-initramfs -u
+
+Adicione as novas opções de montagem do sistema de arquivos ao arquivo /etc/fstab para montagem automática na inicialização:
+
+echo '/dev/md0 /mnt/md0 ext4 defaults,nofail,discard 0 0' | sudo tee -a /etc/fstab
+
+Sua matriz RAID 1 agora montará e montará automaticamente cada inicialização.
+
+Agora você terminou a configuração do RAID. Se você quiser tentar um RAID diferente, siga as instruções de redefinição no início deste tutorial para prosseguir com a criação de um novo tipo de matriz RAID.
+
