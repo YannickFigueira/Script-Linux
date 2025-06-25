@@ -7,12 +7,32 @@ PASTA_INSTALACAO="/home/$USER/Downloads"
 # URLs
 URL_DOCKER="https://desktop.docker.com/linux/main/amd64/docker-desktop-amd64.deb?utm_source=docker&utm_medium=webreferral&utm_campaign=docs-driven-download-linux-amd64&_gl=1*1cqxlth*_gcl_au*Nzc2Mjk4NDg2LjE3NTA0NjY2MjY.*_ga*MTI5Njc3NTgyOS4xNzUwNDY2NjI2*_ga_XJWPQMJYHQ*czE3NTA0NjY2MjYkbzEkZzEkdDE3NTA0NjgyOTIkajU0JGwwJGgw"
 
+PACOTES_APT=(
+	qemu-system-x86
+	pass
+	ca-certificates
+	curl
+	gnupg
+	lsb-release
+	uidmap
+)
+
+PACOTES_DOCKER=(
+	docker-ce
+	docker-ce-cli
+	containerd.io
+	docker-buildx-plugin
+	docker-compose-plugin
+)
+
 atualiazar_repositorios () {
 	sudo apt update
 }
 
 instalar_pacotes_apt () {
-	for pkga in qemu-system-x86 pass ca-certificates curl gnupg lsb-release uidmap; do sudo apt install -y $pkga || true; done
+	for pkgapt in ${PACOTES_APT[@]}; do
+		sudo apt install $pkgapt -y
+	done
 }
 
 preparar_ambiente () {
@@ -25,7 +45,9 @@ preparar_ambiente () {
 	  $(lsb_release -cs) stable" | \
 	  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 	  atualiazar_repositorios
-  	  for pkgdkr in docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin; do sudo apt install -y $pkgdkr || true; done
+	  for pkgdocker in ${PACOTES_DOCKER[@]}; do
+	  	sudo apt install $pkgdocker -y
+	  done
 }
 
 instalar_pacotes_debs () {
