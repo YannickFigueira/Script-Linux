@@ -1,12 +1,19 @@
 #! /bin/bash
 
+# Programas para uso no servidor
+PACOTES_APT=(
+  eza
+  ncdu
+  openssh-server
+  neofetch
+  duf
+)
+
 sudo apt update -y
 sudo apt -f install -y
-sudo apt install eza -y
-sudo apt install ncdu -y
-sudo apt install openssh-server -y
-sudo apt install neofetch -y
-sudo apt install duf -y
+for pkgapt in ${PACOTES_APT[@]}; do
+  sudo apt install $pkgapt -y
+done
 sudo snap install btop
 sudo snap refresh
 
@@ -31,7 +38,7 @@ sudo mv 00-installer-config.yaml /etc/netplan/00-installer-config.yaml
 sudo netplan apply
 curl -fsSL https://get.casaos.io | sudo bash
 
-sudo apt update && sudo apt dist-upgrade -y
+sudo apt update && sudo apt full-upgrade -y
 sudo apt autoclean
 sudo apt autoremove -y
 
