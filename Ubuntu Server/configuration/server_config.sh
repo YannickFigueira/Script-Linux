@@ -39,8 +39,6 @@ alias linkhard='ln'
 
 EOF
 
-source /home/$USER/.bashrc
-
 istalar_dependencias () {
 	for programa in ${PACOTES_APT[@]}; do 
 		if ! dpkg -l | grep -q $programa; then
@@ -49,6 +47,7 @@ istalar_dependencias () {
 			echo "[INFO] - O pacote $programa já está instalado."
 		fi
 	done
+	sudo tldr --update
 	sudo apt update
 }
 

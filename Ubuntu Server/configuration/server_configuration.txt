@@ -10,6 +10,10 @@ wget -O server_config.sh https://raw.githubusercontent.com/YannickFigueira/Scrip
 # Liberar arquivo para ser usado como script
 chmod +x server_config.sh
 
+# Após a execução
+# bash
+source /home/$USER/.bashrc
+
 
 #######################################################################################################################
 
