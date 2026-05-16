@@ -16,6 +16,10 @@ PROGRAMAS_PARA_INSTALAR_SNAP=(
 	tldr
 )
 
+configurar_ssh () {
+	systemctl enable ssh
+}
+
 criar_bashaliases () {
 	# Configuração do .bash_aliases
 	cat <<EOF > $BASH_FILE 
@@ -129,3 +133,4 @@ instalar_pacotes_apt
 instalar_pacotes_snap
 criar_bashaliases
 configurar_ip
+configurar_ssh
