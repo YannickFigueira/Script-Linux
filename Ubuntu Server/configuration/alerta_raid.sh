@@ -1,18 +1,33 @@
-#! /bin/bash
+#!/bin/bash
+
+# 1. Detecta o usuário real (mesmo se o script for rodado com sudo)
+USUARIO_REAL="${SUDO_USER:-$USER}"
+HOME_REAL=$(eval echo ~$USUARIO_REAL)
 
 RAID_MONITOR="/etc/systemd/system/raid-monitor.service"
 
-sudo mv raid_monitor.py /home/$USER/
+echo "Configurando o monitor para o usuário: $USUARIO_REAL"
+echo "Diretório Home: $HOME_REAL"
+echo "--------------------------------------------------"
 
+# 2. Move o script Python para a Home correta e ajusta o dono do arquivo
+if [ -f "raid_monitor.py" ]; then
+    sudo mv raid_monitor.py "$HOME_REAL/"
+    sudo chown "$USUARIO_REAL:$USUARIO_REAL" "$HOME_REAL/raid_monitor.py"
+else
+    echo "⚠️ Aviso: arquivo raid_monitor.py não encontrado no diretório atual."
+fi
+
+# 3. Cria o arquivo de serviço do Systemd injetando as rotas dinâmicas
 sudo bash -c "cat <<EOF > $RAID_MONITOR
 [Unit]
 Description=Monitor de RAID via Telegram
 After=network.target
 
 [Service]
-User=$USER
-WorkingDirectory=/home/$USER
-ExecStart=/usr/bin/python3 /home/$USER/raid_monitor.py
+User=$USUARIO_REAL
+WorkingDirectory=$HOME_REAL
+ExecStart=/usr/bin/python3 $HOME_REAL/raid_monitor.py
 Restart=always
 RestartSec=60
 
@@ -20,11 +35,15 @@ RestartSec=60
 WantedBy=multi-user.target
 EOF"
 
-# Recarrega as configurações do sistema
+# 4. Recarrega as configurações do sistema
 sudo systemctl daemon-reload
 
-# Ativa para iniciar automaticamente no boot
-sudo systemctl enable raid-monitor
+# 5. Ativa para iniciar automaticamente no boot
+sudo systemctl enable raid-monitor.service
 
-# Inicia o monitor agora
-sudo systemctl start raid-monitor
+# 6. Inicia o monitor agora (apenas se o arquivo existir para evitar falha no start)
+if [ -f "$HOME_REAL/raid_monitor.py" ]; then
+    sudo systemctl restart raid-monitor.service
+    echo "✅ Serviço raid-monitor iniciado com sucesso!"
+    sudo systemctl status raid-monitor.service --no-pager -l
+fi
