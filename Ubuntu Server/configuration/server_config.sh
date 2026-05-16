@@ -3,7 +3,7 @@
 BASH_FILE="/home/$USER/.bash_aliases"
 
 # Programas para uso no servidor
-PACOTES_APT=(
+PROGRAMAS_PARA_INSTALAR_APT=(
   eza
   ncdu
   # openssh-server
@@ -11,6 +11,11 @@ PACOTES_APT=(
   duf
   bat
   tldr
+)
+
+PROGRAMAS_PARA_INSTALAR_SNAP=(
+	btop
+	tldr
 )
 
 # Configuração do .bash_aliases
@@ -39,16 +44,29 @@ alias linkhard='ln'
 
 EOF
 
-istalar_dependencias () {
-	for programa in ${PACOTES_APT[@]}; do 
+instalar_pacotes_apt () {
+	for programa in ${PROGRAMAS_PARA_INSTALAR_APT[@]}; do 
 		if ! dpkg -l | grep -q $programa; then
 			sudo apt install $programa -y
 		else
 			echo "[INFO] - O pacote $programa já está instalado."
 		fi
 	done
-	tldr --update
 	sudo apt update
 }
 
-istalar_dependencias
+instalar_pacotes_snap () {
+	#for pkgs in btop bashtop gimp gnome-boxes nvtop copilot-desktop tldr firefox; do sudo snap install "$pkgs" || true; done
+	for programa in ${PROGRAMAS_PARA_INSTALAR_SNAP[@]}; do
+		if ! snap list | grep -q $programa; then
+			sudo snap install $programa
+		else
+			echo "[INFO] - O pacote $programa já está instalado."
+		fi
+	done
+	tldr --update
+	sudo snap refresh
+}
+
+instalar_pacotes_apt
+instalar_pacotes_snap
