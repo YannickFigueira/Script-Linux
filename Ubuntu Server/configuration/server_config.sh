@@ -41,7 +41,6 @@ EOF
 source $BASH
 
 istalar_dependencias () {
- sudo apt install -y "$pkgdep" || true; done
 	for programa in ${PACOTES_APT[@]}; do 
 		if ! dpkg -l | grep -q $programa; then
 			sudo apt install $programa -y
