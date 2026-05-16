@@ -9,7 +9,6 @@ PROGRAMAS_PARA_INSTALAR_APT=(
   # openssh-server
   neofetch
   duf
-  bat
 )
 
 PROGRAMAS_PARA_INSTALAR_SNAP=(
@@ -51,6 +50,7 @@ instalar_pacotes_apt () {
 			echo "[INFO] - O pacote $programa já está instalado."
 		fi
 	done
+	sudo apt install bat -y
 	sudo apt update
 }
 
