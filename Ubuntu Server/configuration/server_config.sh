@@ -49,8 +49,8 @@ EOF
 
 configurar_ip () {
 
-	# 1. Identifica a interface de rede física principal
-	INTERFACE=$(ls /sys/class/net | grep -v lo | head -n 1)
+	# 1. Identifica a interface associada à rota padrão (gateway)
+	INTERFACE=$(ip route | grep default | awk '{print $5}' | head -n 1)
 
 	# 2. Encontra o arquivo .yaml do Netplan
 	ARQUIVO_NETPLAN=$(ls /etc/netplan/*.yaml | head -n 1)
