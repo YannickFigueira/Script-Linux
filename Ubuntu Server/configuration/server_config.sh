@@ -14,7 +14,8 @@ PACOTES_APT=(
 )
 
 # Configuração do .bash_aliases
-cat <<EOF > $BASH_FILE comandos personalizados
+cat <<EOF > $BASH_FILE 
+# comandos personalizados
 # Updates
 alias update='sudo apt update'
 alias upgrade='sudo apt upgrade -y'
