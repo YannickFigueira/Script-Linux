@@ -106,6 +106,8 @@ EOF"
 
 configurar_casaos () {
 	curl -fsSL https://get.casaos.io | sudo bash
+	sudo mv /DATA/AppData /mnt/md0/
+	sudo ln -s /mnt/md0/AppData /DATA/AppData
 }
 
 instalar_pacotes_apt () {
