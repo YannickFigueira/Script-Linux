@@ -32,11 +32,15 @@ Os comandos abaixo consultam automaticamente a API do GitHub para identificar a 
 URL_API="[https://api.github.com/repos/YannickFigueira/Script-Linux/releases/latest](https://api.github.com/repos/YannickFigueira/Script-Linux/releases/latest)"
 
 # Faz a consulta e o download
+<<<<<<< HEAD
+curl -s "$URL_API" | grep "browser_download_url.*servidor_config.tar.xz" | cut -d : -f 2,3 | tr -d \" | wget -qi -
+=======
 curl -s "$URL_API" \
 | grep "browser_download_url.*servidor_config.tar.xz" \
 | cut -d : -f 2,3 \
 | tr -d \" \
 | wget -qi -
+>>>>>>> e659d65 (comando para download atualizado)
 
 # Descompacta o pacote extraindo os scripts (.sh)
 tar -xf servidor_config.tar.xz
