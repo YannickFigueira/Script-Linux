@@ -1,44 +1,55 @@
 #! /bin/bash
+# Variaveis
+BASH="/home/$USER/.bash_aliases"
 
 # Programas para uso no servidor
 PACOTES_APT=(
   eza
   ncdu
-  openssh-server
+  # openssh-server
   neofetch
   duf
+  bat
+  tldr
 )
 
-sudo apt update -y
-sudo apt -f install -y
-for pkgapt in ${PACOTES_APT[@]}; do
-  sudo apt install $pkgapt -y
-done
-sudo snap install btop
-sudo snap refresh
+# Configuração do .bash_aliases
+cat <<EOF > $BASH comandos personalizados
+# Updates
+alias update='sudo apt update'
+alias upgrade='sudo apt upgrade -y'
+alias updateall='sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && sudo snap refresh'
 
-# Configuração da rede
-cat <<EOF > 00-installer-config.yaml
-network:
-  ethernets:
-    enp0s3:
-      dhcp4: no
-      addresses:
-        - 192.168.2.150/24
-      routes:
-        - to: default
-          via: 192.168.2.1
-      nameservers:
-        addresses:
-          - 8.8.8.8
-          - 1.1.1.1
-  version: 2
+# manangers
+alias shut='shutdown -h now'
+alias cat='batcat'
+alias install='sudo apt install'
+alias ls='eza'
+alias lsa='eza -lhai'
+alias lst='eza -lhais size'
+alias lsm='eza -lhais modified'
+alias copiar='rsync -ah --progress'
+alias ips='ip -c -br a'
+alias gh='history | grep'
+alias manual='tldr'
+alias extrair='tar -xzvf'
+alias linksim='sudo ln -s'
+alias linkhard='ln'
+
 EOF
-sudo mv 00-installer-config.yaml /etc/netplan/00-installer-config.yaml
-sudo netplan apply
-curl -fsSL https://get.casaos.io | sudo bash
 
-sudo apt update && sudo apt full-upgrade -y
-sudo apt autoclean
-sudo apt autoremove -y
+source $BASH
 
+istalar_dependencias () {
+ sudo apt install -y "$pkgdep" || true; done
+	for programa in ${PACOTES_APT[@]}; do 
+		if ! dpkg -l | grep -q $programa; then
+			sudo apt install $programa -y
+		else
+			echo "[INFO] - O pacote $programa já está instalado."
+		fi
+	done
+	sudo apt update
+}
+
+istalar_dependencias
