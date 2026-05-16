@@ -1,0 +1,10 @@
+{
+    "app": {
+        "name": "raid_monitor",
+        "version": "4.0.0"
+    },
+    "database": {
+        "telegrambot": "",
+        "chat_id": ""
+    }
+}
