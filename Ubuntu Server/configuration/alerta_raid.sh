@@ -2,16 +2,17 @@
 
 RAID_MONITOR="/etc/systemd/system/raid-monitor.service"
 
+sudo mv raid_monitor.py /home/$USER/
+
 sudo bash -c "cat <<EOF > $RAID_MONITOR
 [Unit]
 Description=Monitor de RAID via Telegram
 After=network.target
 
 [Service]
-# Substitua 'kronos' pelo seu usuário real se for diferente
-User=kronos
-WorkingDirectory=/home/kronos
-ExecStart=/usr/bin/python3 /home/kronos/raid_monitor.py
+User=$USER
+WorkingDirectory=/home/$USER
+ExecStart=/usr/bin/python3 /home/$USER/raid_monitor.py
 Restart=always
 RestartSec=60
 
