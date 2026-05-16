@@ -104,6 +104,10 @@ EOF"
 
 }
 
+configurar_casaos () {
+	curl -fsSL https://get.casaos.io | sudo bash
+}
+
 instalar_pacotes_apt () {
 	for programa in ${PROGRAMAS_PARA_INSTALAR_APT[@]}; do 
 		if ! dpkg -l | grep -q $programa; then
@@ -134,3 +138,4 @@ instalar_pacotes_snap
 criar_bashaliases
 configurar_ip
 configurar_ssh
+configurar_casaos
