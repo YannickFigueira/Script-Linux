@@ -1,3 +1,14 @@
+###Configurações iniciais do servidor###
+# Verificar ssh e habilitar
+systemctl status ssh
+# Se estiver como disable executar
+systemctl enable ssh
+
+### Acessar servidor via ssh link de downlod do arquivo de configuração automatizada
+wget https://raw.githubusercontent.com/YannickFigueira/Script-Linux/main/Ubuntu%20Server/configuration/server_config.sh
+
+#######################################################################################################################
+
 ###Configurar IP fixo###
 Para configurar um IP fixo no Ubuntu Server, siga estes passos:
 
