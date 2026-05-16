@@ -28,14 +28,23 @@ Uma vez conectado ao servidor via SSH, execute os comandos abaixo em ordem para 
 Os comandos abaixo consultam automaticamente a API do GitHub para identificar a versão mais recente do pacote `servidor_config.tar.xz`, realizam o download e descompactam os arquivos na pasta atual:
 
 ```bash
-# Define a URL em uma variável protegida por aspas (evita links automáticos no markdown)
+# Define a URL da API do GitHub para buscar o último release
 URL_API="[https://api.github.com/repos/YannickFigueira/Script-Linux/releases/latest](https://api.github.com/repos/YannickFigueira/Script-Linux/releases/latest)"
 
-# Faz a consulta e o download
-curl -s "$URL_API" | grep "browser_download_url.*servidor_config.tar.xz" | cut -d : -f 2,3 | tr -d \" | wget -qi -
+# Busca a URL de download direto do arquivo .tar.xz dentro do JSON da API
+URL_DOWNLOAD=$(curl -s "$URL_API" | grep -oP '"browser_download_url": "\K[^"]*servidor_config.tar.xz')
 
-# Descompacta o pacote extraindo os scripts (.sh)
-tar -xf servidor_config.tar.xz
+# Verifica se a URL foi encontrada antes de prosseguir
+if [ -z "$URL_DOWNLOAD" ]; then
+    echo "❌ Erro: Arquivo servidor_config.tar.xz não foi encontrado no último Release do GitHub."
+else
+    echo "📥 Baixando pacote..."
+    wget -q --show-progress "$URL_DOWNLOAD"
+    
+    echo "📦 Descompactando arquivos..."
+    tar -xf servidor_config.tar.xz
+    echo "✅ Concluído!"
+fi
 
 ```
 
