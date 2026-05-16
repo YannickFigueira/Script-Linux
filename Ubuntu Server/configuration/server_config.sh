@@ -77,19 +77,19 @@ configurar_ip () {
 		# 6. Substitui o conteúdo do Netplan com as variáveis descobertas
 		sudo bash -c "cat <<EOF > $ARQUIVO_NETPLAN
 network:
-ethernets:
-$INTERFACE:
-dhcp4: no
-addresses:
-- $IP_SERVER/24
-routes:
-- to: default
-via: $IP_GATEWAY
-nameservers:
-addresses:
-- 8.8.8.8
-- 1.1.1.1
-version: 2
+  ethernets:
+    $INTERFACE:
+      dhcp4: no
+      addresses:
+        - $IP_SERVER/24
+      routes:
+        - to: default
+          via: $IP_GATEWAY
+      nameservers:
+        addresses:
+          - 8.8.8.8
+          - 1.1.1.1
+  version: 2
 EOF"
 
 		echo "Configuração gerada com sucesso!"
