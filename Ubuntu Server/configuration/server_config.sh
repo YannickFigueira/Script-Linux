@@ -90,13 +90,13 @@ configurar_ip () {
 					- 8.8.8.8
 					- 1.1.1.1
 		version: 2
-	EOF"
+EOF"
 
 		echo "Configuração gerada com sucesso!"
 		echo "Para aplicar e testar, execute: sudo netplan apply"
 	fi
 
-	sudo netpaln apply
+	sudo netplan apply
 
 }
 
