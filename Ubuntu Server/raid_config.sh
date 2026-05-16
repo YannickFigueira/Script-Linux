@@ -14,3 +14,5 @@ identificar_discos_raid() {
         echo "-------------------------------------"
     fi
 }
+
+identificar_discos_raid
