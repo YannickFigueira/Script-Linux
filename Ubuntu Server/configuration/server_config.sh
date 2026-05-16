@@ -10,7 +10,6 @@ PROGRAMAS_PARA_INSTALAR_APT=(
   neofetch
   duf
   bat
-  tldr
 )
 
 PROGRAMAS_PARA_INSTALAR_SNAP=(
