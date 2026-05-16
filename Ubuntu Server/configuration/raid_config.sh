@@ -19,13 +19,17 @@ identificar_discos_raid() {
         # Adicionado o parâmetro --assume-clean ou você pode deixar o mdadm sincronizar
         sudo mdadm --create --verbose /dev/md0 --level=1 --raid-devices=2 "/dev/${DISCOS_RAID[0]}" "/dev/${DISCOS_RAID[1]}"
 
-        # SUBSTITUTO DO WATCH: Aguarda a sincronização inicial terminar antes de formatar
+        # SUBSTITUTO DO WATCH COM PORCENTAGEM:
         echo "Aguardando a inicialização do RAID..."
         while grep -q "resync" /proc/mdstat; do
-            echo "Sincronizando discos... aguarde 5 segundos."
+            # Extrai apenas o número da porcentagem (ex: 12%)
+            PORCENTAGEM=$(grep -oE "[0-9]+(\.[0-9]+)?%" /proc/mdstat | head -n 1)
+            
+            # Limpa a linha atual e mostra o progresso
+            echo -ne "Sincronizando discos... Progresso atual: $PORCENTAGEM\r"
             sleep 5
         done
-        echo "RAID pronto e sincronizado!"
+        echo -e "\nRAID pronto e sincronizado a 100%!"
         echo "-------------------------------------"
 
         echo "Formatando o dispositivo /dev/md0 em EXT4..."
