@@ -13,7 +13,12 @@ echo "--------------------------------------------------"
 # 2. Move o script Python para a Home correta e ajusta o dono do arquivo
 if [ -f "raid_monitor.py" ]; then
     sudo mv raid_monitor.py "$HOME_REAL/"
+    sudo mv dados.py "$HOME_REAL/"
+    sudo mv dados "$HOME_REAL/"
+
     sudo chown "$USUARIO_REAL:$USUARIO_REAL" "$HOME_REAL/raid_monitor.py"
+    sudo chown "$USUARIO_REAL:$USUARIO_REAL" "$HOME_REAL/dados.py"
+    sudo chown "$USUARIO_REAL:$USUARIO_REAL" "$HOME_REAL/dados"
 else
     echo "⚠️ Aviso: arquivo raid_monitor.py não encontrado no diretório atual."
 fi

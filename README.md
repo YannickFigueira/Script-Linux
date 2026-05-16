@@ -1,7 +1,7 @@
 ```markdown
 # 🚀 Configuração Inicial Automatizada - Ubuntu Server
 
-Este repositório contém os scripts necessários para realizar a configuração inicial automatizada de um novo servidor Ubuntu, incluindo a criação de um array RAID, otimização de rede e aplicação de aliases personalizados.
+Este repositório contém os scripts necessários para realizar a configuração inicial automatizada de um novo servidor Ubuntu, incluindo a criação de um array RAID, otimização de rede, monitoramento e aplicação de aliases personalizados.
 
 ---
 
@@ -47,6 +47,7 @@ Transforme os arquivos extraídos em executáveis no sistema:
 ```bash
 chmod +x raid_config.sh
 chmod +x server_config.sh
+chmod +x alerta_raid.sh
 
 ```
 
@@ -57,6 +58,24 @@ Rode os scripts um após o outro. O script de RAID preparará o armazenamento e 
 ```bash
 ./raid_config.sh
 ./server_config.sh
+
+```
+
+---
+
+## 📢 Configuração Opcional: Monitoramento com Telegram
+
+Caso deseje receber alertas sobre o estado do seu array RAID diretamente no Telegram, configure o monitor antes de rodar o script de alerta:
+
+1. Acesse a pasta de dados e edite ou substitua o arquivo `config.json` com as suas credenciais do Bot do Telegram (Token e Chat ID).
+2. Execute o script de configuração do monitor para criar e ativar o serviço no Systemd:
+```bash
+./alerta_raid.sh
+
+
+```
+
+
 
 ```
 
