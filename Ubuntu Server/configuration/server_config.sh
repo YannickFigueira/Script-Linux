@@ -128,3 +128,4 @@ instalar_pacotes_snap () {
 instalar_pacotes_apt
 instalar_pacotes_snap
 criar_bashaliases
+configurar_ip
