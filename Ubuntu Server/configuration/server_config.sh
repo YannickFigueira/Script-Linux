@@ -47,7 +47,7 @@ istalar_dependencias () {
 			echo "[INFO] - O pacote $programa já está instalado."
 		fi
 	done
-	sudo tldr --update
+	tldr --update
 	sudo apt update
 }
 
