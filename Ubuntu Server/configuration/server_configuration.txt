@@ -5,7 +5,7 @@ systemctl status ssh
 systemctl enable ssh
 
 ### Acessar servidor via ssh link de downlod do arquivo de configuração automatizada
-wget https://raw.githubusercontent.com/YannickFigueira/Script-Linux/main/Ubuntu%20Server/configuration/server_config.sh
+wget -O server_config.sh https://raw.githubusercontent.com/YannickFigueira/Script-Linux/main/Ubuntu%20Server/configuration/server_config.sh
 
 # Liberar arquivo para ser usado como script
 chmod +x server_config.sh
