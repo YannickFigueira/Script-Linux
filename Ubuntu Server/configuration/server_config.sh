@@ -1,6 +1,6 @@
 #! /bin/bash
 # Variaveis
-BASH="/home/$USER/.bash_aliases"
+BASH_FILE="/home/$USER/.bash_aliases"
 
 # Programas para uso no servidor
 PACOTES_APT=(
@@ -14,7 +14,7 @@ PACOTES_APT=(
 )
 
 # Configuração do .bash_aliases
-cat <<EOF > $BASH comandos personalizados
+cat <<EOF > $BASH_FILE comandos personalizados
 # Updates
 alias update='sudo apt update'
 alias upgrade='sudo apt upgrade -y'
@@ -38,7 +38,7 @@ alias linkhard='ln'
 
 EOF
 
-source $BASH
+source /home/$USER/.bashrc
 
 istalar_dependencias () {
 	for programa in ${PACOTES_APT[@]}; do 
