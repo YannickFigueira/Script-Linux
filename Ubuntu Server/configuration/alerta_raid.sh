@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sudo apt install python3-python-telegram-bot
+
 # 1. Detecta o usuário real (mesmo se o script for rodado com sudo)
 USUARIO_REAL="${SUDO_USER:-$USER}"
 HOME_REAL=$(eval echo ~$USUARIO_REAL)
