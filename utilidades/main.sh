@@ -1,31 +1,18 @@
 #!/bin/bash
 
-ips = ip -c -br a
+var ips=ip -c -br a
 
 start() {
-    
+
     clear
 
-    echo '--------------------'
+    echo "+------------------+"
     echo '|     Welcome      |'
-    echo '--------------------'
-}
-
-usuario() {
-
-    read -p "Digite o Login: " nome
-    read -s -p "Digite a senha: " senha
-
-    echo "$nome - $senha"
-}
-
-pesquisa() {
-
-    #clear
-
-    echo '--------------------'
+    echo '+------------------+'
+    echo
+    echo '+------------------+'
     echo '|   Informações    |'
-    echo '--------------------'
+    echo '+------------------+'
 
     echo 'Escolha uma das opções'
     echo '[1] - Verificar redes'
@@ -36,13 +23,21 @@ pesquisa() {
     if [[ $pesquisar -eq "2" ]]; then videos; fi
 }
 
+usuario() {
+
+    read -p "Digite o Login: " nome
+    read -s -p "Digite a senha: " senha
+
+    echo "$nome - $senha"
+}
+
 redes() {
 
     clear
 
-    echo '--------------------'
-    echo '|      Redes        |'
-    echo '--------------------'
+    echo '+------------------+'
+    echo '|      Redes       |'
+    echo '+------------------+'
 
     echo 'Escolha uma das opções'
     echo '[1] - Listar ips'
@@ -52,16 +47,16 @@ redes() {
 
     if [[ $rede -eq "1" ]]; then ip -c -br a; fi
     if [[ $rede -eq "2" ]]; then read -p "Digite ou cole o site aqui: " site && traceroute $site; fi
-    if [[ $rede -eq "v" ]]; then start && pesquisa; fi
+    if [[ $rede -eq "v" ]]; then start; fi
 }
 
 videos() {
 
     clear
 
-    echo '--------------------'
-    echo '|      Vídeos       |'
-    echo '--------------------'
+    echo '+------------------+'
+    echo '|      Vídeos      |'
+    echo '+------------------+'
 
     echo 'Escolha uma das opções'
     echo '[1] - Identificar placa de vídeo'
@@ -69,7 +64,7 @@ videos() {
     echo '[v] - Voltar'
     read -p "Digite uma opção: " video
 
-    if [[ $video -eq "1" ]]; then 
+    if [[ $video -eq "1" ]]; then
         echo '----------------------------------------'
         lspci | grep -i -E 'vga|3d|display';
         echo '----------------------------------------'
@@ -79,12 +74,10 @@ videos() {
 
         if [[ $video -eq "1" ]]; then nvidia-smi; fi
     fi
-    if [[ $video -eq "v" ]]; then start && pesquisa; fi
+    if [[ $video -eq "v" ]]; then start; fi
 }
 
 
 start
 
 #usuario
-
-pesquisa
