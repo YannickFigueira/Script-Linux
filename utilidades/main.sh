@@ -1,7 +1,5 @@
 #!/bin/bash
 
-var ips=ip -c -br a
-
 desenhar_caixa() {
     titulo=$1
     largura=30
@@ -92,10 +90,12 @@ start() {
     echo 'Escolha uma das opções'
     echo '[1] - Verificar redes'
     echo '[2] - Verificar placas de vídeo'
+    echo '[3] - Relatórios'
     read -p "Digite uma opção: " pesquisar
 
     if [[ $pesquisar -eq "1" ]]; then redes; fi
     if [[ $pesquisar -eq "2" ]]; then videos; fi
+    if [[ $pesquisar -eq "3" ]]; then relatorios; fi
 }
 
 usuario() {
@@ -142,7 +142,7 @@ videos() {
     echo '[1] - Identificar placa de vídeo'
     echo '[2] - listar codec gráficos'
     echo '[v] - Voltar'
-    read -p "Digite uma opção: " video
+    read -r -p "Digite uma opção: " video
 
     if [[ $video -eq "1" ]]; then
 
@@ -165,6 +165,22 @@ videos() {
     if [[ $video -eq "v" ]]; then start; fi
 
     #start
+}
+
+relatorios() {
+
+  clear
+
+    desenhar_caixa "Relatórios"
+
+    echo 'Escolha uma das opções'
+    echo '[1] - Erros críticos'
+    echo '[v] - Voltar'
+    read -r -p "Digite uma opção: " relatorio
+
+    if [[ $relatorio -eq 1 ]]; then
+      journalctl -b -p 3
+    fi
 }
 
 
